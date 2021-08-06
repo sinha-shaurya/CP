@@ -7,7 +7,7 @@
 using namespace std;
 int egg_drop(int, int);
 int cases = 0;
-int dp[1000][1000];
+int dp[1000][1000]={};
 int main()
 {
     int n, k;
