@@ -29,12 +29,12 @@ public class MaxCostPathDp {
     }
 
     static int maxCostPath(int cost[][], int n, int m) {
-        int minCost = Integer.MIN_VALUE;
+        int maxCost = Integer.MIN_VALUE;
         for (int i = 0; i < m; i++) {
-            minCost = Math.max(minCost, getCost(cost, n, m, 0, i));
+            maxCost = Math.max(maxCost, getCost(cost, n, m, 0, i));
             // System.err.println(cost[0][i]);
         }
-        return minCost;
+        return maxCost;
     }
 
     static int getCost(int a[][], int row, int col, int x, int y) {
