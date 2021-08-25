@@ -1,20 +1,25 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class WordLadder {
     // container for vertices and their paths from source
     static class node {
-        int vertex;
-        List<Integer> path;
+        String vertex;
+        List<String> path;
 
-        node(int vertex, List<Integer> list) {
+        node(String vertex, List<String> list) {
             this.vertex = vertex;
             this.path = list;
         }
 
         // get path from source
-        List<Integer> getPath() {
+        List<String> getPath() {
             return path;
+        }
+
+        void addNode(String loc) {
+            path.add(loc);
         }
     }
 
@@ -25,12 +30,11 @@ public class WordLadder {
         beginWord = in.readLine();
         endWord = in.readLine();
         wordList = Arrays.asList(in.readLine().split(","));
-        // List<List<String>> ans =
-        findLadders(beginWord, endWord, wordList);
-        /*
-         * for (List<String> l : ans) {
-         * System.out.println(Arrays.toString(l.toArray())); }
-         */
+        List<List<String>> ans = findLadders(beginWord, endWord, wordList);
+        for (List<String> list : ans) {
+            System.out.println(Arrays.toString(list.toArray()));
+        }
+
     }
 
     // utility function to give diff between strings
@@ -48,9 +52,10 @@ public class WordLadder {
     }
 
     // Get list of word ladders for given beginWord and endWord
-    public static void findLadders(String beginWord, String endWord, List<String> wordList) {
-        List<List<String>> ans;
+    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        LinkedList<List<String>> ans = new LinkedList<>();
         // construct adj list
+
         HashMap<String, LinkedList<String>> adj = new HashMap<>();
         // first add beginWord
         for (int j = 0; j < wordList.size() - 1; j++) {
@@ -80,11 +85,56 @@ public class WordLadder {
                 }
             }
         }
-        for (Map.Entry<String, LinkedList<String>> entry : adj.entrySet()) {
-            String start = entry.getKey();
-            System.out.println(start + ":" + Arrays.toString(entry.getValue().toArray()));
-        }
+        Queue<node> q = new LinkedList<>();
+        HashMap<String, Boolean> visited = new HashMap<>();
 
-        // return ans;
+        node start = new node(beginWord, new ArrayList<String>());
+        start.addNode(beginWord);
+        q.add(start);
+        visited.put(beginWord, true);
+        while (!q.isEmpty()) {
+            // System.out.println("Inside BFS");
+
+            // System.out.println();
+            node v = q.poll();
+            // check for neighbours of q
+            if (adj.containsKey(v.vertex)) {
+                // System.out.println(Arrays.toString(adj.get(v.vertex).toArray()));
+                for (String u : adj.get(v.vertex)) {
+                    // if we have reached our end gotta add the solution anyway
+                    if (u.equals(endWord)) {
+                        List<String> path = new ArrayList<String>(v.getPath());
+                        path.add(endWord);
+                        // System.out.println(Arrays.toString(path.toArray()));
+                        ans.add(path);
+                        q.add(new node(u, path));
+                    } else {
+                        if (!visited.containsKey(u)) {
+                            List<String> path = new ArrayList<String>(v.getPath());
+                            path.add(u);
+                            q.add(new node(u, path));
+                            visited.put(u, true);
+                        }
+                    }
+                }
+            }
+        }
+        /*
+         * for(List<String> list:ans){
+         * System.out.println(Arrays.toString(list.toArray())); }
+         */
+        int minPathLength = Integer.MAX_VALUE;
+        for (List<String> path : ans) {
+            minPathLength = Math.min(minPathLength, path.size());
+        }
+        LinkedList<List<String>> min = new LinkedList<>();
+        for (List<String> i : ans) {
+            if (i.size() == minPathLength) {
+                min.add(i);
+            }
+        }
+        // Set<List<String>> set=new HashSet<>(min);
+        // min=new LinkedList<>(set)
+        return min;
     }
 }
