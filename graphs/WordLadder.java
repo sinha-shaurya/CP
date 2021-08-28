@@ -1,5 +1,7 @@
+/**
+ * Solution to Word Ladder 2: https://leetcode.com/problems/word-ladder-ii/
+ */
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class WordLadder {
