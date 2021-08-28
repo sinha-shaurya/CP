@@ -97,6 +97,7 @@ public class WordLadder {
 
             // System.out.println();
             node v = q.poll();
+            visited.put(v.vertex, true);
             // check for neighbours of q
             if (adj.containsKey(v.vertex)) {
                 // System.out.println(Arrays.toString(adj.get(v.vertex).toArray()));
@@ -113,7 +114,7 @@ public class WordLadder {
                             List<String> path = new ArrayList<String>(v.getPath());
                             path.add(u);
                             q.add(new node(u, path));
-                            visited.put(u, true);
+                            
                         }
                     }
                 }
@@ -133,8 +134,8 @@ public class WordLadder {
                 min.add(i);
             }
         }
-        // Set<List<String>> set=new HashSet<>(min);
-        // min=new LinkedList<>(set)
+         Set<List<String>> set=new HashSet<>(min);
+        min=new LinkedList<>(set);
         return min;
     }
 }
