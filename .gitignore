@@ -1,2 +1,5 @@
 tree.exe
 .vscode
+*.class
+*.exe
+*.out
